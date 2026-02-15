@@ -1,10 +1,20 @@
 # Project 3: Spots
 
-### Overview
+"Spots” is an interactive image-sharing application.
+
+## Description of the site: Spots
+
+Users will be able to add and remove photos, like photos from other users, and make minor adjustments to their profile.
+
+### Tech Overview: Spots
 
 - Intro
 - Figma
 - Images
+- HTML
+- CSS
+- Responsive design
+- Deployment
 
 **Intro**
 
@@ -18,6 +28,18 @@ This project is made so all the elements are displayed correctly on popular scre
 
 The way you'll do this at work is by exporting images directly from Figma — we recommend doing that to practice more. Don't forget to optimize them [here](https://tinypng.com/), so your project loads faster.
 
-Good luck and have fun!
+**HTML**
 
-The site is live at https://tito1718.github.io/se_project_spots/
+This markup language contains a body with a header, content with images, cards and a footer.
+
+**CSS**
+
+The styling sheet consist of blocks (card, cards, content, footer, header, page and profile).
+
+**Responsive design**
+
+This project is meant to fit, respond and addapt to different screen sizes.
+
+#### Deployment
+
+Deployment link, https://tito1718.github.io/se_project_spots/
