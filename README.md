@@ -42,4 +42,4 @@ This project is meant to fit, respond and addapt to different screen sizes.
 
 #### Deployment
 
-[Deployment link] ( https://tito1718.github.io/se_project_spots/ )
+[Deployment link](https://tito1718.github.io/se_project_spots/)
