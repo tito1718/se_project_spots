@@ -43,3 +43,8 @@ This project is meant to fit, respond and addapt to different screen sizes.
 #### Deployment
 
 [Deployment link](https://tito1718.github.io/se_project_spots/)
+
+##### Project Pitch Video
+
+Check out [this video](https://drive.google.com/file/d/1BjCO97bqkg8_Ys9_1gIXQbi-gIEdz9Sl/view?usp=sharing), where I describe my
+project and some challenges I faced while building it.
