@@ -41,6 +41,7 @@
   height: 40px;
   background-image: url(../images/spots-images/Property\ 1=Default.svg);
   background-position: center;
+  background-color: transparent;
   opacity: 40%;
   border: none;
 }
@@ -114,13 +115,12 @@
   }
 
   .modal__close-btn {
-    top: 22px;
+    top: 12px;
     right: 12px;
   }
 
   .modal__title {
     font-size: 20px;
-    margin: 0 0 24px;
   }
 
   .modal__label {
