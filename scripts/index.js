@@ -46,6 +46,14 @@ const newPostCloseBtn = newPostModal.querySelector(".modal__close-btn");
 const profileNameEl = document.querySelector(".profile__name");
 const profileDescriptionEl = document.querySelector(".profile__description");
 
+function openModal(modal) {
+  modal.classList.add("modal_is-opened");
+}
+
+function closeModal(modal) {
+  modal.classList.remove("modal_is-opened");
+}
+
 editProfileBtn.addEventListener("click", function () {
   editProfileNameInput.value = profileNameEl.textContent;
   editProfileDescriptionInput.value = profileDescriptionEl.textContent;
@@ -81,14 +89,6 @@ function handleNewPostSubmit(evt) {
 }
 
 newPostForm.addEventListener("submit", handleNewPostSubmit);
-
-function openModal(modal) {
-  modal.classList.add("modal_is-opened");
-}
-
-function closeModal(modal) {
-  modal.classList.remove("modal_is-opened");
-}
 
 initialCards.forEach(function (item) {
   console.log(item.name);
