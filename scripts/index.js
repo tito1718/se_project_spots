@@ -131,6 +131,13 @@ editProfileForm.addEventListener("submit", handleEditProfileSubmit);
 function handleNewPostSubmit(evt) {
   evt.preventDefault();
 
+  if (
+    !newPostCaptionInput.value.trim() ||
+    !newPostImageLinkInput.value.trim()
+  ) {
+    return;
+  }
+
   const inputValues = {
     name: newPostCaptionInput.value,
     link: newPostImageLinkInput.value,
@@ -138,6 +145,7 @@ function handleNewPostSubmit(evt) {
 
   const cardElement = getCardElement(inputValues);
   cardsList.prepend(cardElement);
+  newPostForm.requestFullscreen();
   closeModal(newPostModal);
 }
 

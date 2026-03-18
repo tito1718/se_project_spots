@@ -12,6 +12,11 @@
   object-fit: cover;
   display: block;
   border-radius: 8px;
+  cursor: pointer;
+}
+
+.card__image:hover {
+  opacity: 0.8;
 }
 
 .card__title {
