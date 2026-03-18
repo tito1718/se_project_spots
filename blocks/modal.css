@@ -15,6 +15,7 @@
   justify-content: center;
   align-items: center;
   padding: 0 10px;
+  z-index: 1111;
 }
 
 .modal_is-opened {
@@ -59,14 +60,11 @@
 }
 
 .modal__close-btn_type_preview:hover {
-  background-image: url(../images/spots-images/preview\ hover.svg);
   cursor: pointer;
   opacity: 1;
 }
 
 .modal__close-btn:hover {
-  background-image: url(../images/spots-images/Property\ 1=Variant2.svg);
-  cursor: pointer;
   opacity: 1;
 }
 
@@ -144,6 +142,7 @@
 }
 
 .modal__caption {
+  margin: 0;
   position: absolute;
   left: 0;
   top: calc(100% + 10px);
