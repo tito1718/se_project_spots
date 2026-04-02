@@ -1,12 +1,3 @@
-const settings = {
-  formSelector: ".modal__form",
-  inputSelector: ".modal__input",
-  submitButtonSelector: ".modal__submit-btn",
-  inactiveButtonClass: "modal__button_disabled",
-  inputErrorClass: "modal__input_type_error",
-  errorClass: "modal__error",
-};
-
 const initialCards = [
   {
     name: "Golden Gate Bridge",
@@ -42,7 +33,6 @@ const editProfileBtn = document.querySelector(".profile__edit-btn");
 const editProfileModal = document.querySelector("#edit-profile-modal");
 const newPostBtn = document.querySelector(".profile__add-btn");
 const newPostModal = document.querySelector("#new-post-modal");
-const editProfileCloseBtn = editProfileModal.querySelector(".modal__close-btn");
 const editProfileForm = editProfileModal.querySelector(".modal__form");
 const editProfileNameInput = editProfileModal.querySelector(
   "#profile_name-input",
@@ -55,13 +45,10 @@ const newPostSubmitBtn = newPostModal.querySelector(".modal__submit-btn");
 const newPostImageLinkInput = newPostModal.querySelector("#card-image-input");
 const newPostCaptionInput = newPostModal.querySelector("#caption-input");
 
-const newPostCloseBtn = newPostModal.querySelector(".modal__close-btn");
-
 const profileNameEl = document.querySelector(".profile__name");
 const profileDescriptionEl = document.querySelector(".profile__description");
 
 const previewModal = document.querySelector("#preview-modal");
-const previewModalCloseBtn = previewModal.querySelector(".modal__close-btn");
 const previewImageEl = previewModal.querySelector(".modal__image");
 const captionEl = previewModal.querySelector(".modal__caption");
 
@@ -69,6 +56,7 @@ const cardTemplate = document
   .querySelector("#card-template")
   .content.querySelector(".card");
 const cardsList = document.querySelector(".cards__list");
+const closeButtons = document.querySelectorAll(".modal__close-btn");
 
 function getCardElement(data) {
   const cardElement = cardTemplate.cloneNode(true);
@@ -107,8 +95,9 @@ function closeModal(modal) {
   modal.classList.remove("modal_is-opened");
 }
 
-previewModalCloseBtn.addEventListener("click", function () {
-  closeModal(previewModal);
+closeButtons.forEach((button) => {
+  const modal = button.closest(".modal");
+  button.addEventListener("click", () => closeModal(modal));
 });
 
 editProfileBtn.addEventListener("click", function () {
@@ -122,16 +111,8 @@ editProfileBtn.addEventListener("click", function () {
   openModal(editProfileModal);
 });
 
-editProfileCloseBtn.addEventListener("click", function () {
-  closeModal(editProfileModal);
-});
-
 newPostBtn.addEventListener("click", function () {
   openModal(newPostModal);
-});
-
-newPostCloseBtn.addEventListener("click", function () {
-  closeModal(newPostModal);
 });
 
 function handleEditProfileSubmit(evt) {
@@ -158,8 +139,8 @@ function handleNewPostSubmit(evt) {
     link: newPostImageLinkInput.value,
   };
 
-  const cardElement = getCardElement(inputValues);
-  cardsList.prepend(cardElement);
+  renderCard(inputValues, "prepend");
+
   newPostForm.reset();
   disableButton(newPostSubmitBtn, settings);
   closeModal(newPostModal);
@@ -167,7 +148,11 @@ function handleNewPostSubmit(evt) {
 
 newPostForm.addEventListener("submit", handleNewPostSubmit);
 
-initialCards.forEach(function (item) {
+function renderCard(item, method = "prepend") {
   const cardElement = getCardElement(item);
-  cardsList.append(cardElement);
+  cardsList[method](cardElement);
+}
+
+initialCards.forEach(function (item) {
+  renderCard(item, "prepend");
 });
