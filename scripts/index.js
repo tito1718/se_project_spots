@@ -58,6 +58,15 @@ const cardTemplate = document
 const cardsList = document.querySelector(".cards__list");
 const closeButtons = document.querySelectorAll(".modal__close-btn");
 
+const modals = document.querySelectorAll(".modal");
+modals.forEach((modal) => {
+  modal.addEventListener("mousedown", (e) => {
+    if (e.target === modal) {
+      closeModal(modal);
+    }
+  });
+});
+
 function getCardElement(data) {
   const cardElement = cardTemplate.cloneNode(true);
   const cardTitleEl = cardElement.querySelector(".card__title");
@@ -87,11 +96,20 @@ function getCardElement(data) {
   return cardElement;
 }
 
+function handleEscape(evt) {
+  if (evt.key === "Escape") {
+    const openedModal = document.querySelector(".modal_is-opened");
+    closeModal(openedModal);
+  }
+}
+
 function openModal(modal) {
+  document.addEventListener("keydown", handleEscape);
   modal.classList.add("modal_is-opened");
 }
 
 function closeModal(modal) {
+  document.removeEventListener("keydown", handleEscape);
   modal.classList.remove("modal_is-opened");
 }
 
