@@ -44,7 +44,10 @@ This project is meant to fit, respond and addapt to different screen sizes.
 
 [Deployment link](https://tito1718.github.io/se_project_spots/)
 
-##### Project Pitch Video
+##### Project Pitch Videos
 
-Check out [this video](https://drive.google.com/file/d/1BjCO97bqkg8_Ys9_1gIXQbi-gIEdz9Sl/view?usp=sharing), where I describe my
-project and some challenges I faced while building it.
+Check out these videos, where I describe my project and some challenges I faced while building it:
+
+- [Loom | Cesar Chirino | Project Pitch | Stage Stage 2 | 16 February 2026](https://drive.google.com/file/d/1BjCO97bqkg8_Ys9_1gIXQbi-gIEdz9Sl/view?usp=sharing)
+
+- [Loom | Cesar Chirino | Project Pitch | Spots Stage 9 | 5 April 2026] (https://www.loom.com/share/5e626d7134af49cbb574b3efabe6e1f2)
