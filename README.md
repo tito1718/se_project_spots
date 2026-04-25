@@ -15,6 +15,8 @@ Users will be able to add and remove photos, like photos from other users, and m
 - CSS
 - Responsive design
 - Deployment
+- JavaScript
+- Webpack
 
 **Intro**
 
