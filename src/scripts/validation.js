@@ -1,78 +1,86 @@
+//SETTINGS//
+
 export const settings = {
   formSelector: ".modal__form",
   inputSelector: ".modal__input",
   submitButtonSelector: ".modal__submit-btn",
   inactiveButtonClass: "modal__submit-btn_disabled",
   inputErrorClass: "modal__input_type_error",
-  errorClass: "modal__error",
 };
 
-const showInputError = (formEl, inputEl, errorMsg, config) => {
-  const errorMsgEl = formEl.querySelector(`#${inputEl.id}-error`);
-  errorMsgEl.textContent = errorMsg;
-  inputEl.classList.add(config.inputErrorClass);
-};
+//ERROR//
 
-const hideInputError = (formEl, inputEl, config) => {
-  const errorMsgEl = formEl.querySelector(`#${inputEl.id}-error`);
-  errorMsgEl.textContent = "";
-  inputEl.classList.remove(config.inputErrorClass);
-};
+function showError(form, input, message, config) {
+  const error = form.querySelector(`#${input.id}-error`);
+  if (!error) return;
 
-const checkInputValidity = (formEl, inputEl, config) => {
-  if (!inputEl.validity.valid) {
-    showInputError(formEl, inputEl, inputEl.validationMessage, config);
+  input.classList.add(config.inputErrorClass);
+  error.textContent = message;
+}
+
+function hideError(form, input, config) {
+  const error = form.querySelector(`#${input.id}-error`);
+  if (!error) return;
+
+  input.classList.remove(config.inputErrorClass);
+  error.textContent = "";
+}
+
+//VALIDATION//
+
+function checkInput(form, input, config) {
+  if (!input.validity.valid) {
+    showError(form, input, input.validationMessage, config);
   } else {
-    hideInputError(formEl, inputEl, config);
+    hideError(form, input, config);
   }
-};
+}
 
-const hasInvalidInput = (inputList) => {
-  return inputList.some((input) => {
-    return !input.validity.valid;
-  });
-};
+function hasInvalid(inputs) {
+  return inputs.some((i) => !i.validity.valid);
+}
 
-const toggleButtonState = (inputList, buttonEl, config) => {
-  if (hasInvalidInput(inputList)) {
-    disableButton(buttonEl, config);
+//BUTTON//
+
+function toggleButton(inputs, button, config) {
+  if (!button) return;
+
+  if (hasInvalid(inputs)) {
+    button.disabled = true;
+    button.classList.add(config.inactiveButtonClass);
   } else {
-    buttonEl.disabled = false;
-    buttonEl.classList.remove(config.inactiveButtonClass);
+    button.disabled = false;
+    button.classList.remove(config.inactiveButtonClass);
   }
-};
+}
 
-export const disableButton = (buttonEl, config) => {
-  buttonEl.disabled = true;
-  buttonEl.classList.add(config.inactiveButtonClass);
-};
+//RESET//
 
-export const resetValidation = (formEl, inputList, config) => {
-  inputList.forEach((input) => {
-    hideInputError(formEl, input, config);
-  });
-};
+export function resetValidation(form, inputs = [], config) {
+  const button = form.querySelector(config.submitButtonSelector);
 
-const setEventListeners = (formEl, config) => {
-  const inputList = Array.from(formEl.querySelectorAll(config.inputSelector));
-  const buttonElement = formEl.querySelector(config.submitButtonSelector);
+  inputs.forEach((input) => hideError(form, input, config));
+  toggleButton(inputs, button, config);
+}
 
-  toggleButtonState(inputList, buttonElement, config);
-  formEl.addEventListener("reset", () => {
-    disableButton(buttonElement, config);
-  });
+//INIT//
 
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener("input", function () {
-      checkInputValidity(formEl, inputElement, config);
-      toggleButtonState(inputList, buttonElement, config);
+function setListeners(form, config) {
+  const inputs = [...form.querySelectorAll(config.inputSelector)];
+  const button = form.querySelector(config.submitButtonSelector);
+
+  toggleButton(inputs, button, config);
+
+  inputs.forEach((input) => {
+    input.addEventListener("input", () => {
+      checkInput(form, input, config);
+      toggleButton(inputs, button, config);
     });
   });
-};
+}
 
-export const enableValidation = (config) => {
-  const formList = document.querySelectorAll(config.formSelector);
-  formList.forEach((formEl) => {
-    setEventListeners(formEl, config);
+export function enableValidation(config) {
+  document.querySelectorAll(config.formSelector).forEach((form) => {
+    setListeners(form, config);
   });
-};
+}

@@ -1,21 +1,35 @@
+//IMPORTS//
+
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+//EXPORT//
+
 module.exports = {
+  //ENTRY//
+
   entry: {
     main: "./src/pages/index.js",
   },
+
+  //OUTPUT//
+
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "main.js",
     publicPath: "",
   },
 
+  //MODE//
+
   mode: "development",
   devtool: "inline-source-map",
   stats: "errors-only",
+
+  //DEV SERVER//
+
   devServer: {
     static: path.resolve(__dirname, "./dist"),
     compress: true,
@@ -24,7 +38,13 @@ module.exports = {
     liveReload: true,
     hot: false,
   },
+
+  //TARGET//
+
   target: ["web", "es5"],
+
+  //MODULE RULES//
+
   module: {
     rules: [
       {
@@ -51,6 +71,9 @@ module.exports = {
       },
     ],
   },
+
+  //PLUGINS//
+
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",

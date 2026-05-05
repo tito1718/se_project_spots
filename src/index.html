@@ -9,47 +9,63 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <title>Spots</title>
   </head>
+
   <body>
     <div class="page">
       <header class="header">
         <img src="" alt="Spots logo" class="header__logo" />
       </header>
+
       <main class="content">
         <section class="profile page__section">
-          <img src="" alt="users profile picture" class="profile__avatar" />
+          <div class="profile__avatar-container">
+            <button class="profile__avatar-btn" aria-label="Edit avatar">
+              <img src="" alt="Edit avatar icon" class="profile__pencil-icon" />
+            </button>
+            <img src="" alt="Users profile picture" class="profile__avatar" />
+          </div>
           <div class="profile__column">
             <h1 class="profile__name">Bessie Coleman</h1>
             <p class="profile__description">Civil Aviator</p>
             <button type="button" class="profile__edit-btn">
-              <img src="" alt="Pen icon" />Edit Profile
+              <img src="" alt="Edit profile icon" /> Edit Profile
             </button>
           </div>
           <button type="button" class="profile__add-btn">
-            <img src="" alt="Plus icon" />New Post
+            <img src="" alt="Add post icon" /> New Post
           </button>
         </section>
+
         <section class="cards page__section">
           <ul class="cards__list">
             <template id="card-template">
               <li class="card">
-                <button class="card__delete-btn"></button>
-                <img class="card__image" src="#" alt="" />
+                <button
+                  class="card__delete-btn"
+                  aria-label="Delete card"
+                ></button>
+                <img class="card__image" src="" alt="Card image" />
                 <div class="card__content">
                   <h2 class="card__title"></h2>
-                  <button
-                    aria-label="Like card"
-                    class="card__like-btn"
-                    type="button"
-                  ></button>
+                  <div class="card__like-container">
+                    <button
+                      aria-label="Like card"
+                      class="card__like-btn"
+                      type="button"
+                    ></button>
+                    <span class="card__like-count">0</span>
+                  </div>
                 </div>
               </li>
             </template>
           </ul>
         </section>
       </main>
+
       <footer class="footer page__section">
         <p class="footer__credit">2026 © Spots</p>
       </footer>
+
       <div class="modal" id="new-post-modal">
         <div class="modal__container">
           <button type="button" class="modal__close-btn"></button>
@@ -83,6 +99,7 @@
           </form>
         </div>
       </div>
+
       <div class="modal" id="edit-profile-modal">
         <div class="modal__container">
           <button type="button" class="modal__close-btn"></button>
@@ -122,6 +139,7 @@
         </div>
       </div>
     </div>
+
     <div class="modal" id="preview-modal">
       <div class="modal__image-container">
         <button
@@ -129,8 +147,60 @@
           class="modal__close-btn modal__close-btn_type_preview"
           type="button"
         ></button>
-        <img src="#" alt="" class="modal__image" />
+        <img src="" alt="" class="modal__image" />
         <p class="modal__caption"></p>
+      </div>
+    </div>
+    <div class="modal" id="edit-avatar-modal">
+      <div class="modal__container">
+        <button type="button" class="modal__close-btn"></button>
+        <h2 class="modal__title">Edit profile avatar</h2>
+        <form class="modal__form" id="edit-avatar-form" novalidate>
+          <label for="profile-avatar-input" class="modal__label">
+            Profile Picture
+            <input
+              id="profile-avatar-input"
+              type="url"
+              class="modal__input"
+              name="avatar"
+              placeholder="Paste the link to an image"
+              required
+            />
+            <span id="profile-avatar-input-error" class="modal__error"></span>
+          </label>
+          <button type="submit" class="modal__submit-btn">Save</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="delete-modal">
+      <div class="modal__container">
+        <button
+          aria-label="Close modal"
+          class="modal__close-btn"
+          type="button"
+        ></button>
+        <h2 class="modal__title modal__title_delete">
+          Are you sure you want to delete this image?
+        </h2>
+        <form
+          class="modal__form modal__form_type_delete"
+          id="delete-form"
+          novalidate
+        >
+          <button
+            type="submit"
+            class="modal__submit-btn modal__submit-btn_type_delete"
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            class="modal__submit-btn modal__submit-btn_type_cancel"
+          >
+            Cancel
+          </button>
+        </form>
       </div>
     </div>
   </body>
