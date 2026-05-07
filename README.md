@@ -93,3 +93,5 @@ Check out these videos, where I describe my project and some challenges I faced 
 - [Loom | Cesar Chirino | Project Pitch | Spots Stage 2 | 16 February 2026](https://drive.google.com/file/d/1BjCO97bqkg8_Ys9_1gIXQbi-gIEdz9Sl/view?usp=sharing)
 
 - [Loom | Cesar Chirino | Project Pitch | Spots Stage 9 | 5 April 2026] (https://www.loom.com/share/5e626d7134af49cbb574b3efabe6e1f2)
+
+- [Loom | Cesar Chirino | Project Pitch | Spots Stage Final | 5 May 2026] (https://www.loom.com/share/851da114a00748d28464fc934010df4f)
