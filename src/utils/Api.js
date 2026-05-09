@@ -1,9 +1,19 @@
-//API//
+//API CLASS//
 
 class Api {
   constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
     this._headers = headers;
+  }
+
+  //HANDLE RESPONSE//
+
+  _handleResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject(new Error(`Error: ${res.status}`));
   }
 
   //REQUEST//
@@ -12,15 +22,17 @@ class Api {
     return fetch(`${this._baseUrl}${endpoint}`, {
       headers: this._headers,
       ...options,
+
       body: options.body ? JSON.stringify(options.body) : undefined,
-    }).then(this._handleResponse);
+    }).then((res) => {
+      return this._handleResponse(res);
+    });
   }
 
-  //RESPONSE//
+  //APP INFO//
 
-  _handleResponse(res) {
-    if (res.ok) return res.json();
-    return Promise.reject(`Error: ${res.status}`);
+  getAppInfo() {
+    return Promise.all([this.getInitialCards(), this.getUserInfo()]);
   }
 
   //CARDS//
@@ -29,15 +41,33 @@ class Api {
     return this._request("/cards");
   }
 
-  addNewCard(data) {
+  addNewCard({ name, link }) {
     return this._request("/cards", {
       method: "POST",
-      body: data,
+
+      body: {
+        name,
+        link,
+      },
     });
   }
 
-  deleteCard(id) {
-    return this._request(`/cards/${id}`, {
+  deleteCard(cardId) {
+    return this._request(`/cards/${cardId}`, {
+      method: "DELETE",
+    });
+  }
+
+  //LIKES//
+
+  likeCard(cardId) {
+    return this._request(`/cards/${cardId}/likes`, {
+      method: "PUT",
+    });
+  }
+
+  unlikeCard(cardId) {
+    return this._request(`/cards/${cardId}/likes`, {
       method: "DELETE",
     });
   }
@@ -48,25 +78,28 @@ class Api {
     return this._request("/users/me");
   }
 
-  editUserInfo(data) {
+  editUserInfo({ name, about }) {
     return this._request("/users/me", {
       method: "PATCH",
-      body: data,
+
+      body: {
+        name,
+        about,
+      },
     });
   }
 
-  editAvatar(data) {
+  editAvatar({ avatar }) {
     return this._request("/users/me/avatar", {
       method: "PATCH",
-      body: data,
+
+      body: {
+        avatar,
+      },
     });
   }
-
-  //COMBINED//
-
-  getAppInfo() {
-    return Promise.all([this.getInitialCards(), this.getUserInfo()]);
-  }
 }
+
+//EXPORT//
 
 export default Api;
