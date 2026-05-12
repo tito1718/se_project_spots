@@ -73,41 +73,39 @@ document.querySelectorAll(".modal").forEach((modal) => {
 
 function getCardElement(data) {
   const cardElement = cardTemplate.cloneNode(true);
-  const cardTitle = cardElement.querySelector(".card__title");
-  const cardImage = cardElement.querySelector(".card__image");
+  const title = cardElement.querySelector(".card__title");
+  const image = cardElement.querySelector(".card__image");
   const likeBtn = cardElement.querySelector(".card__like-btn");
   const likeCount = cardElement.querySelector(".card__like-count");
   const deleteBtn = cardElement.querySelector(".card__delete-btn");
   const ownerId = typeof data.owner === "object" ? data.owner._id : data.owner;
 
-  //CARD DATA//
+  //DATA//
 
-  cardTitle.textContent = data.name;
-  cardImage.src = data.link;
-  cardImage.alt = data.name;
+  title.textContent = data.name;
+  image.src = data.link;
+  image.alt = data.name;
 
   //LIKES//
 
-  const likes = Array.isArray(data.likes) ? data.likes : [];
-  let isLiked = likes.some((user) => {
-    return user._id === currentUserId;
-  });
-  likeCount.textContent = likes.length;
-  if (isLiked) {
-    likeBtn.classList.add("card__like-btn_active");
-  }
+  let isLiked = Boolean(data.isLiked);
+  let likeCountValue =
+    typeof data.likesCount === "number" ? data.likesCount : 0;
+  likeCount.textContent = likeCountValue;
+  likeBtn.classList.toggle("card__like-btn_active", isLiked);
   likeBtn.addEventListener("click", () => {
     const apiCall = isLiked ? api.unlikeCard(data._id) : api.likeCard(data._id);
-
     apiCall
       .then((updatedCard) => {
-        const updatedLikes = Array.isArray(updatedCard.likes)
-          ? updatedCard.likes
-          : [];
-        isLiked = updatedLikes.some((user) => {
-          return user._id === currentUserId;
-        });
-        likeCount.textContent = updatedLikes.length;
+        isLiked = Boolean(updatedCard.isLiked);
+        if (typeof updatedCard.likesCount === "number") {
+          likeCountValue = updatedCard.likesCount;
+        } else {
+          likeCountValue = isLiked
+            ? likeCountValue + 1
+            : Math.max(0, likeCountValue - 1);
+        }
+        likeCount.textContent = likeCountValue;
         likeBtn.classList.toggle("card__like-btn_active", isLiked);
       })
       .catch(console.error);
@@ -117,11 +115,7 @@ function getCardElement(data) {
 
   if (ownerId === currentUserId) {
     deleteBtn.addEventListener("click", () => {
-      cardToDelete = {
-        element: cardElement,
-        id: data._id,
-      };
-
+      cardToDelete = { element: cardElement, id: data._id };
       openModal(deleteModal);
     });
   } else {
@@ -130,20 +124,21 @@ function getCardElement(data) {
 
   //PREVIEW//
 
-  cardImage.addEventListener("click", () => {
+  image.addEventListener("click", () => {
     previewImageEl.src = data.link;
     previewImageEl.alt = data.name;
     captionEl.textContent = data.name;
     openModal(previewModal);
   });
+
   return cardElement;
 }
 
 //RENDER//
 
-function renderCard(cardData) {
-  const cardElement = getCardElement(cardData);
-  cardsList.prepend(cardElement);
+function renderCard(item) {
+  const card = getCardElement(item);
+  cardsList.prepend(card);
 }
 
 //DELETE FORM//
@@ -182,24 +177,34 @@ document.querySelectorAll(".modal__close-btn").forEach((btn) => {
 
 editProfileBtn.addEventListener("click", () => {
   const nameInput = editProfileForm.querySelector("#profile_name-input");
-  const descriptionInput = editProfileForm.querySelector(
-    "#profile_description-input",
-  );
+  const descInput = editProfileForm.querySelector("#profile_description-input");
   nameInput.value = profileNameEl.textContent;
-  descriptionInput.value = profileDescriptionEl.textContent;
-  resetValidation(editProfileForm, settings);
+  descInput.value = profileDescriptionEl.textContent;
+  resetValidation(
+    editProfileForm,
+    Array.from(editProfileForm.querySelectorAll(".modal__input")),
+    settings,
+  );
   openModal(editProfileModal);
 });
 
 newPostBtn.addEventListener("click", () => {
   newPostForm.reset();
-  resetValidation(newPostForm, settings);
+  resetValidation(
+    newPostForm,
+    Array.from(newPostForm.querySelectorAll(".modal__input")),
+    settings,
+  );
   openModal(newPostModal);
 });
 
 avatarEditBtn.addEventListener("click", () => {
   avatarForm.reset();
-  resetValidation(avatarForm, settings);
+  resetValidation(
+    avatarForm,
+    Array.from(avatarForm.querySelectorAll(".modal__input")),
+    settings,
+  );
   openModal(avatarModal);
 });
 
@@ -207,22 +212,22 @@ avatarEditBtn.addEventListener("click", () => {
 
 editProfileForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  const submitBtn = editProfileForm.querySelector(".modal__submit-btn");
-  setLoadingState(submitBtn, true, "Save", "Saving...");
+  const btn = editProfileForm.querySelector(".modal__submit-btn");
+  setLoadingState(btn, true, "Save", "Saving...");
 
   api
     .editUserInfo({
       name: editProfileForm.querySelector("#profile_name-input").value,
       about: editProfileForm.querySelector("#profile_description-input").value,
     })
-    .then((userData) => {
-      profileNameEl.textContent = userData.name;
-      profileDescriptionEl.textContent = userData.about;
+    .then((data) => {
+      profileNameEl.textContent = data.name;
+      profileDescriptionEl.textContent = data.about;
       closeModal(editProfileModal);
     })
     .catch(console.error)
     .finally(() => {
-      setLoadingState(submitBtn, false, "Save", "Saving...");
+      setLoadingState(btn, false, "Save", "Saving...");
     });
 });
 
@@ -230,22 +235,22 @@ editProfileForm.addEventListener("submit", (evt) => {
 
 newPostForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  const submitBtn = newPostForm.querySelector(".modal__submit-btn");
-  setLoadingState(submitBtn, true, "Save", "Creating...");
+  const btn = newPostForm.querySelector(".modal__submit-btn");
+  setLoadingState(btn, true, "Save", "Creating...");
 
   api
     .addNewCard({
       name: newPostForm.querySelector("#caption-input").value,
       link: newPostForm.querySelector("#card-image-input").value,
     })
-    .then((cardData) => {
-      renderCard(cardData);
+    .then((data) => {
+      renderCard(data);
       newPostForm.reset();
       closeModal(newPostModal);
     })
     .catch(console.error)
     .finally(() => {
-      setLoadingState(submitBtn, false, "Save", "Creating...");
+      setLoadingState(btn, false, "Save", "Creating...");
     });
 });
 
@@ -253,21 +258,21 @@ newPostForm.addEventListener("submit", (evt) => {
 
 avatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  const submitBtn = avatarForm.querySelector(".modal__submit-btn");
-  setLoadingState(submitBtn, true, "Save", "Updating...");
+  const btn = avatarForm.querySelector(".modal__submit-btn");
+  setLoadingState(btn, true, "Save", "Updating...");
 
   api
     .editAvatar({
       avatar: avatarForm.querySelector("#profile-avatar-input").value,
     })
-    .then((userData) => {
-      profileAvatarImg.src = userData.avatar;
+    .then((data) => {
+      profileAvatarImg.src = data.avatar;
       avatarForm.reset();
       closeModal(avatarModal);
     })
     .catch(console.error)
     .finally(() => {
-      setLoadingState(submitBtn, false, "Save", "Updating...");
+      setLoadingState(btn, false, "Save", "Updating...");
     });
 });
 
@@ -287,9 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
       profileNameEl.textContent = user.name;
       profileDescriptionEl.textContent = user.about;
       profileAvatarImg.src = user.avatar || avatarDefault;
-      cards.forEach((card) => {
-        renderCard(card);
-      });
+      cards.forEach(renderCard);
     })
     .catch(console.error);
 });
